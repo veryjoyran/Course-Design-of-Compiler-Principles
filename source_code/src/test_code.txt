@@ -1,0 +1,6 @@
+int main() {
+    int a = 5;
+    char b = 'x';
+    printf("Hello, World!\n");
+}
+#
