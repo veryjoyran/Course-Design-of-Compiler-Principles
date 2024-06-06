@@ -1,5 +1,6 @@
 {
     "files.associations": {
+<<<<<<< HEAD
         "vector": "cpp",
         "array": "cpp",
         "atomic": "cpp",
@@ -42,5 +43,8 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp"
+=======
+        "utility": "cpp"
+>>>>>>> 3887b57342e3ca8c4bb1c2ba59319a913cf99ba7
     }
 }
