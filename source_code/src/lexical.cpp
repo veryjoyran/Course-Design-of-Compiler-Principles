@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "D:\c_cpp_programming\Course-Design-of-Compiler-Principles\source_code\inc\lexical.h"
+#include "lexical.h"
 
 int main() {
     std::ifstream infile("test_code.txt"); 
