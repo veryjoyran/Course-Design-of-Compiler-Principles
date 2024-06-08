@@ -31,8 +31,8 @@ public:
     void lexical_analysis(std::ifstream& infile, std::vector<std::string>& lines, std::string& S) ;
 
 private:
-    std::vector<std::string> TOKEN_k; // 关键词表
-    std::vector<std::string> TOKEN_p; // 界符表
+    std::vector<std::string> TOKEN_k{"int", "double", "char", "bool","if", "else", "goto", "while"}; // 关键词表
+    std::vector<std::string> TOKEN_p{",", ":", ";", "=", "+", "-", "{", "}", "*", "/", "(", ")", "#", ">", "<", "==", ">=", "<=", "!="}; // 界符表
     std::vector<std::string> TOKEN_i; // 标识符表
     std::vector<std::string> TOKEN_c; // 数字常量表
     std::vector<std::string> TOKEN_strc; // 字符串常量表
@@ -66,9 +66,13 @@ bool LexicalAnalyzer::is_Dig(char c) {
 }
 
 void LexicalAnalyzer::next_state(char ch) {
+    // 初始状态，判断字符类型并进行相应状态转移
     if (state == 0) {
+        // 如果是字母，进入标识符状态
         if (is_Char(ch)) { state = 1; str.push_back(ch); }
+        // 如果是数字，进入数字状态
         else if (is_Dig(ch)) { state = 3; str.push_back(ch); }
+        // 处理各种运算符和界符
         else if (ch == '=') { state = 8; str.push_back(ch); }
         else if (ch == '>') { state = 11; str.push_back(ch); }
         else if (ch == '<') { state = 14; str.push_back(ch); }
@@ -76,6 +80,7 @@ void LexicalAnalyzer::next_state(char ch) {
         else if (ch == '-') { state = 21; str.push_back(ch); }
         else if (ch == '*') { state = 25; str.push_back(ch); }
         else if (ch == '/') { state = 28; str.push_back(ch); }
+        // 处理各种界符
         else if (ch == '{') { state = 31; str.push_back(ch); }
         else if (ch == '}') { state = 32; str.push_back(ch); }
         else if (ch == '(') { state = 33; str.push_back(ch); }
@@ -84,86 +89,117 @@ void LexicalAnalyzer::next_state(char ch) {
         else if (ch == ']') { state = 36; str.push_back(ch); }
         else if (ch == ',') { state = 37; str.push_back(ch); }
         else if (ch == ';') { state = 38; str.push_back(ch); }
+        // 处理字符常量
         else if (ch == 39) { state = 39; str.push_back(ch); }
+        // 处理字符串常量
         else if (ch == 34) { state = 41; str.push_back(ch); }
-    } else if (state == 1) {
+    } 
+    // 标识符状态，继续识别字母、数字或下划线
+    else if (state == 1) {
         if (is_Char(ch) || is_Dig(ch) || ch == '_') { state = 1; str.push_back(ch); }
         else if (ch == '[') {
             state = 43; str.push_back(ch);
         } else {
-            state = 2; i--;
+            state = 2; i--; // 退回一个字符，标识符识别结束
         }
-    } else if (state == 3) {
+    } 
+    // 数字状态，继续识别数字
+    else if (state == 3) {
         if (is_Dig(ch)) { state = 3; str.push_back(ch); }
-        else if (ch == '.') { state = 4; str.push_back(ch); }
+        else if (ch == '.') { state = 4; str.push_back(ch); } // 可能是浮点数
         else {
-            state = 7; i--;
+            state = 7; i--; // 退回一个字符，数字识别结束
         }
-    } else if (state == 4) {
+    } 
+    // 处理浮点数的小数点后部分
+    else if (state == 4) {
         if (is_Dig(ch)) { state = 5; str.push_back(ch); }
         else {
-            error_flag = 1;
+            error_flag = 1; // 浮点数格式错误
         }
-    } else if (state == 5) {
+    } 
+    // 继续识别浮点数的小数部分
+    else if (state == 5) {
         if (is_Dig(ch)) { state = 5; str.push_back(ch); }
         else {
-            state = 6; i--;
+            state = 6; i--; // 退回一个字符，浮点数识别结束
         }
-    } else if (state == 8) {
+    } 
+    // 处理双字符运算符'=='
+    else if (state == 8) {
         if (ch == '=') { state = 9; str.push_back(ch); }
         else {
-            state = 10; i--;
+            state = 10; i--; // 退回一个字符，运算符识别结束
         }
-    } else if (state == 11) {
+    } 
+    // 处理双字符运算符'>='
+    else if (state == 11) {
         if (ch == '=') { state = 12; str.push_back(ch); }
         else {
-            state = 13; i--;
+            state = 13; i--; // 退回一个字符，运算符识别结束
         }
-    } else if (state == 14) {
+    } 
+    // 处理双字符运算符'<='
+    else if (state == 14) {
         if (ch == '=') { state = 15; str.push_back(ch); }
         else {
-            state = 16; i--;
+            state = 16; i--; // 退回一个字符，运算符识别结束
         }
-    } else if (state == 17) {
+    } 
+    // 处理双字符运算符'++'
+    else if (state == 17) {
         if (ch == '+') { state = 18; str.push_back(ch); }
         else if (ch == '=') { state = 19; str.push_back(ch); }
         else {
-            state = 20; i--;
+            state = 20; i--; // 退回一个字符，运算符识别结束
         }
-    } else if (state == 21) {
+    } 
+    // 处理双字符运算符'--'
+    else if (state == 21) {
         if (ch == '-') { state = 22; str.push_back(ch); }
         else if (ch == '=') { state = 23; str.push_back(ch); }
         else {
-            state = 24; i--;
+            state = 24; i--; // 退回一个字符，运算符识别结束
         }
-    } else if (state == 25) {
+    } 
+    // 处理运算符'*='
+    else if (state == 25) {
         if (ch == '=') { state = 26; str.push_back(ch); }
         else {
-            state = 27; i--;
+            state = 27; i--; // 退回一个字符，运算符识别结束
         }
-    } else if (state == 28) {
+    } 
+    // 处理运算符'/='
+    else if (state == 28) {
         if (ch == '=') { state = 29; str.push_back(ch); }
         else {
-            state = 30; i--;
+            state = 30; i--; // 退回一个字符，运算符识别结束
         }
-    } else if (state == 39) {
+    } 
+    // 处理字符常量，状态39表示字符常量起始
+    else if (state == 39) {
         if (ch == 39) { state = 40; str.push_back(ch); }
         else {
             state = 39; str.push_back(ch);
         }
-    } else if (state == 41) {
+    } 
+    // 处理字符串常量，状态41表示字符串常量起始
+    else if (state == 41) {
         if (ch == 34) { state = 42; str.push_back(ch); }
         else {
             state = 41; str.push_back(ch);
         }
-    } else if (state == 43) {
+    } 
+    // 处理数组下标，状态43表示数组下标起始
+    else if (state == 43) {
         if (is_Dig(ch)) { state = 43; str.push_back(ch); }
         else if (ch == ']') { state = 2; str.push_back(ch); }
         else {
-            error_flag = 1;
+            error_flag = 1; // 数组下标格式错误
         }
     }
 }
+
 
 bool LexicalAnalyzer::is_KI() {
     return state == 2;
