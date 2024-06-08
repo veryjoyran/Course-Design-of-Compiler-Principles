@@ -30,13 +30,13 @@ void Lexer::tokenize() {
 
     while (stream >> word) {
         if (isdigit(word[0])) {  // Number constants
-            tokens.push_back(Token(0, getPosition(0, getSymbolId(word)), grammar.getId("Num")));
+            tokens.push_back(Token(0, getPosition(0, getSymbolId(word)), grammar.Id("Num")));
         } else if (keywords.count(word)) {  // Keywords
-            tokens.push_back(Token(1, getPosition(1, getSymbolId(word)), grammar.getId(word)));
+            tokens.push_back(Token(1, getPosition(1, getSymbolId(word)), grammar.Id(word)));
         } else if (delimiters.count(word)) {  // Delimiters
-            tokens.push_back(Token(2, getPosition(2, getSymbolId(word)), grammar.getId(word)));
+            tokens.push_back(Token(2, getPosition(2, getSymbolId(word)), grammar.Id(word)));
         } else {  // Identifiers
-            tokens.push_back(Token(3, getPosition(3, getSymbolId(word)), grammar.getId("Iden")));
+            tokens.push_back(Token(3, getPosition(3, getSymbolId(word)), grammar.Id("Iden")));
             identifiers.insert(word);
         }
     }
