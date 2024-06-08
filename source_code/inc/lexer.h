@@ -13,6 +13,7 @@ struct Token {
     int position;
     int symbolId;
     int type = -1;
+    int level;
 
     Token(int idx = 0, int pos = 0, int symId = 0) : index(idx), position(pos), symbolId(symId) {}
 };
@@ -26,7 +27,7 @@ public:
 
     void tokenize();
 
-private:
+
     std::string sourceCode;
     std::vector<std::string> symbolNames;
     std::vector<int> symbolTable[6]; // Array of vectors for different categories
