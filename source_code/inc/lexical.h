@@ -72,7 +72,7 @@ void LexicalAnalyzer::next_state(char ch) {
         if (is_Char(ch)) { state = 1; str.push_back(ch); }
         // 如果是数字，进入数字状态
         else if (is_Dig(ch)) { state = 3; str.push_back(ch); }
-        // 处理各种运算符和界符
+        // 处理各种单运算符
         else if (ch == '=') { state = 8; str.push_back(ch); }
         else if (ch == '>') { state = 11; str.push_back(ch); }
         else if (ch == '<') { state = 14; str.push_back(ch); }
