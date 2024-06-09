@@ -88,3 +88,32 @@ void lexer_test() {
     std::cout << "lexer_test success!!!" << std::endl;
 }
 
+void parser_test() {
+    std::ifstream infile("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/parser_in.txt");
+    std::ofstream outfile("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/parser_out.txt");
+
+    if (!infile || !outfile) {
+        std::cerr << "无法打开输入或输出文件" << std::endl;
+        return;
+    }
+
+    std::string input((std::istreambuf_iterator<char>(infile)), std::istreambuf_iterator<char>());
+    Lexer lexer(input);
+    lexer.getTokens();
+
+    Grammar grammar;  // 初始化Grammar对象
+    SymTable symtbl(lexer);  // 初始化SymTable对象
+    Parser parser(lexer.tokens, grammar, lexer, symtbl);  // 使用带参数的构造函数
+    parser.LL1();  // 执行LL1解析
+
+    for (const auto& quat : parser.quats) {
+        outfile << "(" << lexer.symbolNames[quat.op] << ", "
+                << (quat.a == -1 ? "_" : lexer.symbolNames[quat.a]) << ", "
+                << (quat.b == -1 ? "_" : lexer.symbolNames[quat.b]) << ", "
+                << (quat.res == -1 ? "_" : lexer.symbolNames[quat.res]) << ")\n";
+    }
+
+    infile.close();
+    outfile.close();
+    std::cout << "parser_test success!!!" << std::endl;
+}
