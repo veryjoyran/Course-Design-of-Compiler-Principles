@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// 创建新的记录并根据类型初始化，并添加到符号表和 synbl 中
 void SymTable::Get_NewRecord(const string& type, int range, vector<Record>& S, int line, int name) {
     Record rcd;
     rcd.range = range;
@@ -20,6 +21,7 @@ void SymTable::Get_NewRecord(const string& type, int range, vector<Record>& S, i
     synbl.push_back(rcd);
 }
 
+// 弹出指定范围的记录
 void SymTable::Pop_Record(int range, map<int, vector<Record>>& InfoTable) {
     for (auto& p : InfoTable) {
         vector<Record>& S = p.second;
@@ -29,6 +31,7 @@ void SymTable::Pop_Record(int range, map<int, vector<Record>>& InfoTable) {
     }
 }
 
+// 打印符号表中的记录
 void SymTable::Print_Table(const map<int, vector<Record>>& InfoTable) {
     for (const auto& p : InfoTable) {
         printf("%s : \n", lex.symbolNames[p.first].c_str());
@@ -41,6 +44,7 @@ void SymTable::Print_Table(const map<int, vector<Record>>& InfoTable) {
     cout << endl;
 }
 
+// 判断字符串是否为数组定义，并解析数组名称和大小
 bool IsArr(const string& str, string& name, int& num) {
     bool ok = false;
     string x;
@@ -58,25 +62,28 @@ bool IsArr(const string& str, string& name, int& num) {
     return ok;
 }
 
+// 获取字符串对应的类型枚举值
 int get_type(const string& s) {
     if (s == "int") return INT;
     else if (s == "double") return DOUBLE;
     else if (s == "char") return CHAR;
     else if (s == "bool") return BOOL;
-    return -1; // Return -1 for unknown types
+    return -1; // 返回 -1 表示未知类型
 }
 
+// 获取类型对应的大小（字节数）
 int get_size(int i) {
     if (i == CHAR) return 1;
     if (i == DOUBLE) return 8;
     return 4;
 }
 
+// 打印标准符号表，包括符号表、类型表和数组信息表
 void SymTable::Print_RegularTable() {
     puts("SYNBL");
     printf("%-8s%-8s%-8s%-8s\n", "NAME", "TYP", "CAT", "ADDR");
-    int d = 0; // the address
-    for (auto& r : synbl) { // Ensure r is not const
+    int d = 0; // 地址
+    for (auto& r : synbl) { // 确保 r 是非 const 的
         printf("%-8s", lex.symbolNames[r.name].c_str());
         switch (r.type) {
             case INT: printf("%-8s", "int"); break;
@@ -101,8 +108,8 @@ void SymTable::Print_RegularTable() {
             printf("%-8s\n", addr);
         } else if (r.type == ARRAY) {
             printf("%-8s\n", "AINFL, 1");
-            r.low = d;  // Ensure this is modifiable
-            r.up = d + r.clen;  // Ensure this is modifiable
+            r.low = d;  // 确保这是可修改的
+            r.up = d + r.clen;  // 确保这是可修改的
             d += r.clen;
             arr.push_back(r);
         } else if (r.type == FUNCTION) {
@@ -111,7 +118,7 @@ void SymTable::Print_RegularTable() {
     }
 
     cout << endl;
-    // Type Table
+    // 类型表
     puts("TYPEL");
     printf("%-8s%-8s\n", "NAME", "TYP");
     for (const auto& r : arr) {
@@ -119,6 +126,7 @@ void SymTable::Print_RegularTable() {
         printf("%-8s\n", "AINFL");
     }
     cout << endl;
+    // 数组信息表
     puts("AINFL");
     printf("%-8s%-8s%-8s%-8s%-8s\n", "NAME", "LOW", "UP", "CTP", "CLEN");
     for (const auto& r : arr) {
@@ -133,16 +141,17 @@ void SymTable::Print_RegularTable() {
         printf("%-8d\n", r.clen);
     }
     cout << endl;
+    // 函数信息表
     puts("PFINFL");
     printf("%-8s%-8s%-8s%-8s%-8s\n", "LEVEL", "OFF", "FN", "ENTRY", "PARAM");
     printf("%-8s%-8s%-8s%-8s%-8s\n", "0", "0", "0", "0", "0");
     cout << endl;
 }
 
-
+// 获取符号表信息
 void SymTable::Get_SymTable() {
     map<int, vector<Record>> CurTable;
-    int range = 0; // count level;
+    int range = 0; // 计数级别
     int d = 0;
 
     for (const auto& line : lines) {
@@ -163,7 +172,7 @@ void SymTable::Get_SymTable() {
             funrec.name = lex.getId("main");
             S.push_back(funrec);
             synbl.push_back(funrec);
-        } else if (Def.count(vs[0])) { // define
+        } else if (Def.count(vs[0])) { // 定义
             for (size_t j = 1; j < vs.size(); ++j) {
                 string name;
                 int num;
@@ -194,12 +203,12 @@ void SymTable::Get_SymTable() {
                     }
                 }
             }
-        } else if (vs[0] == "{") { // get into new range
+        } else if (vs[0] == "{") { // 进入新范围
             ++range;
-        } else if (vs[0] == "}") { // get out of a range
+        } else if (vs[0] == "}") { // 退出当前范围
             Pop_Record(range, CurTable);
             --range;
-        } else { // use of a var
+        } else { // 变量的使用
             for (const auto& v : vs) {
                 if (lex.identifiers.count(v)) {
                     const vector<Record>& vr = CurTable[lex.getId(v)];
