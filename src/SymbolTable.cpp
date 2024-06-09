@@ -156,11 +156,11 @@ void SymTable::Get_SymTable() {
         }
 
         if (line == lines.front()) {
-            vector<Record>& S = CurTable[lex.getSymbolId("main")];
+            vector<Record>& S = CurTable[lex.getId("main")];
             Record funrec;
             funrec.range = 0;
             funrec.Init_Fun(0, 0, 0, 0);
-            funrec.name = lex.getSymbolId("main");
+            funrec.name = lex.getId("main");
             S.push_back(funrec);
             synbl.push_back(funrec);
         } else if (Def.count(vs[0])) { // define
@@ -168,29 +168,29 @@ void SymTable::Get_SymTable() {
                 string name;
                 int num;
                 if (IsArr(vs[j], name, num)) {
-                    vector<Record>& S = CurTable[lex.getSymbolId(name)];
+                    vector<Record>& S = CurTable[lex.getId(name)];
                     Record arrrec;
                     arrrec.ctp = get_type(vs[j]);
                     arrrec.line = &line - &lines[0];
                     arrrec.range = range;
                     arrrec.Init_Arr(0, num, get_type(vs[0]), num * get_size(get_type(vs[0])));
-                    arrrec.name = lex.getSymbolId(name);
+                    arrrec.name = lex.getId(name);
                     S.push_back(arrrec);
                     synbl.push_back(arrrec);
                     continue;
                 }
                 if (vs[j] == "," || vs[j] == ";") continue;
                 if (lex.keywords.count(vs[j]) || lex.delimiters.count(vs[j])) continue;
-                vector<Record>& S = CurTable[lex.getSymbolId(vs[j])];
+                vector<Record>& S = CurTable[lex.getId(vs[j])];
                 if (S.empty()) {
-                    Get_NewRecord(vs[0], range, S, &line - &lines[0] + 1, lex.getSymbolId(vs[j]));
+                    Get_NewRecord(vs[0], range, S, &line - &lines[0] + 1, lex.getId(vs[j]));
                 } else {
                     Record rcd = S.back();
                     if (rcd.range == range) {
                         printf("Error(%d): redefine! Last define is at line: (%d)!\n", &line - &lines[0] + 1, rcd.line);
                         exit(0);
                     } else {
-                        Get_NewRecord(vs[0], range, S, &line - &lines[0] + 1, lex.getSymbolId(vs[j]));
+                        Get_NewRecord(vs[0], range, S, &line - &lines[0] + 1, lex.getId(vs[j]));
                     }
                 }
             }
@@ -202,7 +202,7 @@ void SymTable::Get_SymTable() {
         } else { // use of a var
             for (const auto& v : vs) {
                 if (lex.identifiers.count(v)) {
-                    const vector<Record>& vr = CurTable[lex.getSymbolId(v)];
+                    const vector<Record>& vr = CurTable[lex.getId(v)];
                     if (vr.empty()) {
                         printf("Error(%d): Not defined %s!\n", &line - &lines[0] + 1, v.c_str());
                         exit(0);

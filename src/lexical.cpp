@@ -1,61 +1,6 @@
-#ifndef _LEXICAL_H
-#define _LEXICAL_H
+#include "lexical.h"
+#include <bits/stdc++.h>
 
-#include <cstdio>
-#include <vector>
-#include <cstdlib>
-#include <algorithm>
-#include <string>
-#include <stack>
-#include <iostream>
-#include <utility>
-#include <map>
-#include <iomanip>
-
-class LexicalAnalyzer {
-public:
-    struct Token {
-        int type;
-        int index;
-        int Vt_id;
-        Token(int a = 0, int b = 0, int c = 0) : type(a), index(b), Vt_id(c) {}
-    };
-
-    LexicalAnalyzer() : state(0), level(0), fnum(0), array_len(0), Vt_num(4), error_flag(0), file_flag(0), i(0) {
-        Vt["Iden"] = 0;
-        Vt["Num"] = 1;
-        Vt["Strc"] = 2;
-        Vt["Charc"] = 3;
-    }
-
-    void lexical_analysis(std::ifstream& infile, std::vector<std::string>& lines, std::string& S) ;
-
-private:
-    std::vector<std::string> TOKEN_k{"int", "double", "char", "bool","if", "else", "goto", "while"}; // 关键词表
-    std::vector<std::string> TOKEN_p{",", ":", ";", "=", "+", "-", "{", "}", "*", "/", "(", ")", "#", ">", "<", "==", ">=", "<=", "!="}; // 界符表
-    std::vector<std::string> TOKEN_i; // 标识符表
-    std::vector<std::string> TOKEN_c; // 数字常量表
-    std::vector<std::string> TOKEN_strc; // 字符串常量表
-    std::vector<std::string> TOKEN_charc; // 字符常量表
-    std::map<std::string, int> Vt; // 所有终结符类型的映射
-    std::vector<Token> tokens;
-
-    int state, level, fnum, array_len, Vt_num;
-    int error_flag; // 编译错误标记
-    int file_flag; // 文件读取的标记
-    unsigned int i;
-    std::string str;
-    std::string input_str;
-
-    bool is_Char(char c); // 判断是否是字符
-    bool is_Dig(char c); // 判断是否是数字
-    void next_state(char ch); // 自动机状态转移函数
-    bool is_KI(); // 判断是否为关键词或标识符
-    bool is_C(); // 判断是否为数字常量
-    bool is_CHARC(); // 判断是否为字符常量
-    bool is_STR_C(); // 判断是否为字符串常量
-    bool is_P(); // 判断是否为界符
-};
 
 bool LexicalAnalyzer::is_Char(char c) {
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
@@ -223,7 +168,7 @@ bool LexicalAnalyzer::is_P() {
            (state >= 29 && state <= 38);
 }
 
-void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::string>& lines, std::string& S) {
+void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::ofstream& outfile, std::vector<std::string>& lines, std::string& S) {
     state = 0;
     error_flag = 0;
     file_flag = 0;
@@ -238,7 +183,7 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
         if (input_str.empty()) {
             continue;
         }
-        printf("line %d: ", line++);
+        outfile << "line " << line++ << ": ";
 
         std::vector<std::string> strs;
 
@@ -252,7 +197,7 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
                 }
                 if (is_KI()) {
                     strs.push_back(str);
-                    std::cout << str << " ";
+                    outfile << str << " ";
                     bool flag_k = false, flag_i = false;
                     for (size_t j = 0; j < TOKEN_k.size(); ++j) {
                         if (str == TOKEN_k[j]) {
@@ -279,7 +224,7 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
                     str.clear();
                 } else if (is_P()) {
                     strs.push_back(str);
-                    std::cout << str << " ";
+                    outfile << str << " ";
                     for (size_t j = 0; j < TOKEN_p.size(); ++j) {
                         if (str == TOKEN_p[j]) {
                             Token token(2, j, Vt[TOKEN_p[j]]);
@@ -290,7 +235,7 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
                     str.clear();
                 } else if (is_C()) {
                     strs.push_back(str);
-                    std::cout << str << " ";
+                    outfile << str << " ";
                     bool flag_c = false;
                     for (size_t j = 0; j < TOKEN_c.size(); ++j) {
                         if (str == TOKEN_c[j]) {
@@ -308,7 +253,7 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
                     str.clear();
                 } else if (is_STR_C()) {
                     strs.push_back(str);
-                    std::cout << str << " ";
+                    outfile << str << " ";
                     bool flag_strc = false;
                     for (size_t j = 0; j < TOKEN_strc.size(); ++j) {
                         if (str == TOKEN_strc[j]) {
@@ -326,7 +271,7 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
                     str.clear();
                 } else if (is_CHARC()) {
                     strs.push_back(str);
-                    std::cout << str << " ";
+                    outfile << str << " ";
                     bool flag_charc = false;
                     for (size_t j = 0; j < TOKEN_charc.size(); ++j) {
                         if (str == TOKEN_charc[j]) {
@@ -345,9 +290,9 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
                 }
                 i++;
             }
-            std::cout << std::endl;
+            outfile << std::endl;
             if (error_flag == 1) {
-                printf("编译程序出错!!\n");
+                outfile << "编译程序出错!!" << std::endl;
                 break;
             }
         } else {
@@ -367,12 +312,6 @@ void LexicalAnalyzer::lexical_analysis(std::ifstream& infile, std::vector<std::s
     }
 
     for (size_t j = 0; j < tokens.size(); ++j) {
-        printf("(%d , %d , %d)\n", tokens[j].type, tokens[j].index, tokens[j].Vt_id);
+        outfile << "(" << tokens[j].type << " , " << tokens[j].index << " , " << tokens[j].Vt_id << ")" << std::endl;
     }
 }
-
-
-
-
-
-#endif // _LEXICAL_H

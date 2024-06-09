@@ -1,0 +1,16 @@
+int main( ) 
+{ 
+	int x;
+	int y;
+	int z;
+	int a[10];
+	if(x > z) 
+	{
+		x = x + y;
+	}
+	else 
+	{
+		y = y + z;
+	}
+}
+#

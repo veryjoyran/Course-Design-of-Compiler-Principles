@@ -8,6 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <utility>
+#include <fstream>
 
 class Grammar {
 public:

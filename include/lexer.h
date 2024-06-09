@@ -7,32 +7,33 @@
 #include <set>
 #include <sstream>
 #include "grammar.h"
+#include "lexical.h"
 
 struct Token {
-    int index;
-    int position;
-    int symbolId;
+    int i;
+    int j;
+    int Vt_id;
     int type = -1;
     int level;
 
-    Token(int idx = 0, int pos = 0, int symId = 0) : index(idx), position(pos), symbolId(symId) {}
+    Token(int i = 0, int j = 0, int Vt_id = 0) : i(i), j(j), Vt_id(Vt_id) {}
 };
 
 class Lexer {
 public:
     Lexer(const std::string& input);
-    int getSymbolId(const std::string& str);
-    int getPosition(int category, int id);
+    int getId(const std::string& str);
+    int getPos(int category, int id);
+    void getTokens();
+
+    
+
     Grammar grammar;
-
-    void tokenize();
-
-
     std::string sourceCode;
     std::vector<std::string> symbolNames;
     std::vector<int> symbolTable[6]; // Array of vectors for different categories
     std::vector<Token> tokens;
-    std::set<std::string> keywords{"int", "double", "char", "if", "else", "goto", "while"};
+    std::set<std::string> keywords{"int", "double", "char", "bool","if", "else", "goto", "while"};
     std::set<std::string> delimiters{",", ":", ";", "=", "+", "-", "{", "}", "*", "/", "(", ")", "#", ">", "<", "==", ">=", "<=", "!="};
     std::set<std::string> identifiers;
 
