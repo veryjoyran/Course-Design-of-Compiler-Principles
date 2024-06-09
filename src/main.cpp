@@ -11,6 +11,7 @@ int main() {
     lexical_test();
     grammar_test();
     lexer_test();
+    parser_test();
     return 0;
 }
 
