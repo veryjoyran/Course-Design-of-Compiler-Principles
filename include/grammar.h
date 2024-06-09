@@ -32,7 +32,7 @@ public:
     void Print_Select() const;
     void Print_Vnull() const;
 
-private:
+
     std::vector<std::string> names;
     std::set<int> Vt, Vn, Vnull;
     std::vector<std::pair<int, std::vector<int>>> Gram;
