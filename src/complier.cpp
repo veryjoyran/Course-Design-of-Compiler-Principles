@@ -70,8 +70,13 @@ void lexer_test() {
     std::ifstream infile("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/lexer_in.txt");
     std::ofstream outfile("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/lexer_out.txt");
 
-    if (!infile || !outfile) {
-        std::cerr << "无法打开输入或输出文件" << std::endl;
+    if (!infile) {
+        std::cerr << "无法打开输入文件" << std::endl;
+        return;
+    }
+
+    if (!outfile) {
+        std::cerr << "无法打开输出文件" << std::endl;
         return;
     }
 
@@ -87,6 +92,8 @@ void lexer_test() {
     outfile.close();
     std::cout << "lexer_test success!!!" << std::endl;
 }
+
+
 
 void parser_test() {
     std::ifstream infile_parser("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/parser_in.txt");
@@ -131,6 +138,13 @@ void parser_test() {
     grammar.Get_Follow();
     grammar.Get_Select();
 
+    // 打印结果
+    grammar.Print_Vnull();
+    grammar.Print_First();
+    grammar.Print_Follow();
+    grammar.Print_Select();
+
+
     // 恢复标准输入和输出
     std::cin.rdbuf(cinbuf);
     std::cout.rdbuf(coutbuf);
@@ -147,6 +161,8 @@ void parser_test() {
     Parser parser(lexer.tokens, grammar, lexer, symtbl);  // 使用带参数的构造函数
     std::cout<<"LL(1) start"<<"\n";
     parser.LL1();  // 执行LL1解析
+
+
     
     std::cout<<"LL(1) completed"<<"\n";
     for (const auto& quat : parser.quats) {
