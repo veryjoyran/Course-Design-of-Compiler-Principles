@@ -1,30 +1,121 @@
 Vnull:
+VarDecl
+IdenTab_
+StaTab_
 Exp_
 Item_
+ElseSta
+LabSta
+L_
 
 First:
-Exp : Num (
-Exp_ : + -
-Item : Num (
+Prog_ : int double char bool
+Prog : int double char bool
+VarDecl : int double char bool
+IdenTab : Iden
+ComSta : {
+StaTab : Iden { if while
+AssiSta : Iden
+AssiSta_ : Iden
+IdenTab_ : ,
+StaTab_ : ;
+Exp : Iden Num (
+Exp_ : > < >= <= == !=
+Item : Iden Num (
 Item_ : * /
-Fac : Num (
+Fac : Iden Num (
+Type : int double char bool
+IfSta : if
+ElseSta : else
+IfSta_ : {
+LabSta : Iden goto
+LabSta_ : Iden
+LabSta' : Iden
+WSta : while
+Swh : while
+Sdo : (
+L : Iden Num (
+L_ : + -
 
 Follow:
-Exp : )
-Exp_ : )
-Item : + - )
-Item_ : + - )
-Fac : + - * / )
+Prog_ :
+Prog : #
+VarDecl : Iden { if while
+IdenTab : ;
+ComSta : Iden } ; else goto #
+StaTab : Iden } goto
+AssiSta : Iden } ; goto
+AssiSta_ : =
+IdenTab_ : ;
+StaTab_ : Iden } goto
+Exp : Iden } ; ) goto
+Exp_ : Iden } ; ) goto
+Item : Iden } ; + - ) goto > < >= <= == !=
+Item_ : Iden } ; + - ) goto > < >= <= == !=
+Fac : Iden } ; + - * / ) goto > < >= <= == !=
+Type : Iden
+IfSta : Iden } ; goto
+ElseSta : Iden } ; goto
+IfSta_ : Iden } ; goto
+LabSta : }
+LabSta_ : Iden { if while
+LabSta' : :
+WSta : Iden } ; goto
+Swh : (
+Sdo : {
+L : Iden } ; ) goto > < >= <= == !=
+L_ : Iden } ; ) goto > < >= <= == !=
 
 Select:
-Exp : Item Exp_ [ Num ( ]
-Exp_ : + Item Exp_ [ + ]
-Exp_ : - Item Exp_ [ - ]
-Exp_ : ~ [ ) ]
-Item : Fac Item_ [ Num ( ]
+Prog_ : Prog # [ int double char bool ]
+Prog : Type Iden ( ) ComSta [ int double char bool ]
+ComSta : { VarDecl StaTab LabSta } [ { ]
+VarDecl : Type IdenTab ; VarDecl [ int double char bool ]
+VarDecl : ~ [ Iden { if while ]
+IdenTab : Iden IdenTab_ [ Iden ]
+IdenTab_ : , IdenTab [ , ]
+IdenTab_ : ~ [ ; ]
+StaTab : AssiSta StaTab_ [ Iden ]
+StaTab : ComSta StaTab_ [ { ]
+StaTab : IfSta StaTab_ [ if ]
+StaTab_ : ; StaTab [ ; ]
+StaTab_ : ~ [ Iden } goto ]
+IfSta : if ( Exp ) IfSta_ [ if ]
+IfSta_ : ComSta ElseSta [ { ]
+ElseSta : ~ [ Iden } ; goto ]
+ElseSta : else ComSta [ else ]
+AssiSta : AssiSta_ = Exp [ Iden ]
+AssiSta_ : Iden [ Iden ]
+L : Item L_ [ Iden Num ( ]
+L_ : + Item L_ [ + ]
+L_ : - Item L_ [ - ]
+L_ : ~ [ Iden } ; ) goto > < >= <= == != ]
+Item : Fac Item_ [ Iden Num ( ]
 Item_ : * Fac Item_ [ * ]
 Item_ : / Fac Item_ [ / ]
-Item_ : ~ [ + - ) ]
+Item_ : ~ [ Iden } ; + - ) goto > < >= <= == != ]
 Fac : Num [ Num ]
+Fac : Iden [ Iden ]
 Fac : ( Exp ) [ ( ]
+Type : int [ int ]
+Type : double [ double ]
+Type : char [ char ]
+LabSta : LabSta_ StaTab LabSta [ Iden ]
+LabSta_ : LabSta' : [ Iden ]
+LabSta' : Iden [ Iden ]
+LabSta : goto Iden ; [ goto ]
+LabSta : ~ [ } ]
+StaTab : WSta StaTab_ [ while ]
+WSta : Swh Sdo ComSta [ while ]
+Swh : while [ while ]
+Sdo : ( Exp ) [ ( ]
+Exp : L Exp_ [ Iden Num ( ]
+Exp_ : > L Exp_ [ > ]
+Exp_ : < L Exp_ [ < ]
+Exp_ : >= L Exp_ [ >= ]
+Exp_ : <= L Exp_ [ <= ]
+Exp_ : == L Exp_ [ == ]
+Exp_ : != L Exp_ [ != ]
+Exp_ : ~ [ Iden } ; ) goto ]
+Type : bool [ bool ]
 
