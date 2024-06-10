@@ -37,7 +37,8 @@ void Parser::LL1() {
     S.push(gram.Start);  // 将起始符号压入栈
     int d = 0;
     while (!S.empty()) {
-        int i = S.top(), j = tokens[d].Vt_id;
+        int i = S.top();
+        int j = tokens[d].Vt_id;
         if (gram.Vt.count(i)) {  // 如果是终结符
             if (S.top() == j) {
                 d++;
