@@ -6,11 +6,11 @@ int main( )
 	int a[10];
 	if(x > z) 
 	{
-		x = x + y;
+		x = x + y
 	}
 	else 
 	{
-		y = y + z;
+		y = y + z
 	}
 }
 #
