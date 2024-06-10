@@ -32,6 +32,7 @@ void Parser::Debug_LL1(std::stack<int> S, int j, int d) {
 // LL1 解析
 void Parser::LL1() {
     Get_LL1Table();  // 生成 LL1 分析表
+    Print_LL1Table();
     std::stack<int> S;
     S.push(gram.Start);  // 将起始符号压入栈
     int d = 0;
@@ -263,5 +264,13 @@ void Parser::Get_Quats() {
                 for (auto x : rev) S.push(x);
             }
         }
+    }
+}
+
+void Parser::Print_LL1Table() {
+    for (const auto& entry : LL1Table) {
+        std::pair<int, int> key = entry.first;
+        int value = entry.second;
+        std::cout << "LL1Table[(" << key.first << ", " << key.second << ")] = " << value << std::endl;
     }
 }
