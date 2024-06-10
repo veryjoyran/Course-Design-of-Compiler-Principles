@@ -8,10 +8,11 @@
 #include "complier.h"
 
 int main() {
-    lexical_test();
-    grammar_test();
-    lexer_test();
-    parser_test();
+    // lexical_test();
+    // grammar_test();
+    // lexer_test();
+    // parser_test();
+    run();
     return 0;
 }
 
