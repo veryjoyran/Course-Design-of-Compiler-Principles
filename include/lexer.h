@@ -14,7 +14,7 @@ struct Token {
     int j;
     int Vt_id;
     int type = -1;
-    int level;
+    int level=0;
 
     Token(int i = 0, int j = 0, int Vt_id = 0) : i(i), j(j), Vt_id(Vt_id) {}
 };
