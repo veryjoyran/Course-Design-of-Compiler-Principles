@@ -25,7 +25,9 @@ public:
     int getId(const std::string& str);
     int getPos(int category, int id);
     void getTokens();
-
+    bool is_Char(char c);
+    bool is_Dig(char c);
+    void next_state(char ch);
     
 
     Grammar grammar;
@@ -36,8 +38,10 @@ public:
     std::set<std::string> keywords{"int", "double", "char", "bool","if", "else", "goto", "while"};
     std::set<std::string> delimiters{",", ":", ";", "=", "+", "-", "{", "}", "*", "/", "(", ")", "#", ">", "<", "==", ">=", "<=", "!="};
     std::set<std::string> identifiers;
-
-    
+    int state = 0;
+    std::string str;
+    bool error_flag = false;
+    int i = 0;
 };
 
 #endif // LEXER_H
