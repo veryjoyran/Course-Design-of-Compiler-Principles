@@ -53,6 +53,7 @@ public:
     void Print_Act(Action);                  // 打印操作
     void Debug_Quats(std::stack<int>, std::stack<Action>, int, int); // 调试四元式
     int Get_Type(int, int);                  // 获取类型
+    void Print_LL1Table();                   // 打印LL1分析表
 
     std::map<std::pair<int, int>, int> LL1Table; // LL1 分析表
     Grammar gram;                            // 文法对象
