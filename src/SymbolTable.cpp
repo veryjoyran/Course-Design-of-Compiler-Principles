@@ -80,72 +80,72 @@ int get_size(int i) {
 
 // 打印标准符号表，包括符号表、类型表和数组信息表
 void SymTable::Print_RegularTable() {
-    puts("SYNBL");
-    printf("%-8s%-8s%-8s%-8s\n", "NAME", "TYP", "CAT", "ADDR");
+    std::cout << "SYNBL\n";
+    std::cout << std::setw(8) << "NAME" << std::setw(8) << "TYP" << std::setw(8) << "CAT" << std::setw(8) << "ADDR" << "\n";
     int d = 0; // 地址
     for (auto& r : synbl) { // 确保 r 是非 const 的
-        printf("%-8s", lex.symbolNames[r.name].c_str());
+        std::cout << std::setw(8) << lex.symbolNames[r.name];
         switch (r.type) {
-            case INT: printf("%-8s", "int"); break;
-            case DOUBLE: printf("%-8s", "double"); break;
-            case CHAR: printf("%-8s", "char"); break;
-            case BOOL: printf("%-8s", "bool"); break;
-            case ARRAY: printf("%-8s", "AINFL"); break;
-            case FUNCTION: printf("%-8s", "PFINFL"); break;
+            case INT: std::cout << std::setw(8) << "int"; break;
+            case DOUBLE: std::cout << std::setw(8) << "double"; break;
+            case CHAR: std::cout << std::setw(8) << "char"; break;
+            case BOOL: std::cout << std::setw(8) << "bool"; break;
+            case ARRAY: std::cout << std::setw(8) << "AINFL"; break;
+            case FUNCTION: std::cout << std::setw(8) << "PFINFL"; break;
         }
         switch (r.type) {
             case INT:
             case DOUBLE:
             case CHAR:
-            case BOOL: printf("%-8s", "v"); break;
-            case ARRAY: printf("%-8s", "t"); break;
-            case FUNCTION: printf("%-8s", "f"); break;
+            case BOOL: std::cout << std::setw(8) << "v"; break;
+            case ARRAY: std::cout << std::setw(8) << "t"; break;
+            case FUNCTION: std::cout << std::setw(8) << "f"; break;
         }
         if (0 <= r.type && r.type < 4) {
             char addr[10];
             sprintf(addr, "(%d,%d)", r.range, d);
             d += get_size(r.type);
-            printf("%-8s\n", addr);
+            std::cout << std::setw(8) << addr << "\n";
         } else if (r.type == ARRAY) {
-            printf("%-8s\n", "AINFL, 1");
+            std::cout << std::setw(8) << "AINFL, 1\n";
             r.low = d;  // 确保这是可修改的
             r.up = d + r.clen;  // 确保这是可修改的
             d += r.clen;
             arr.push_back(r);
         } else if (r.type == FUNCTION) {
-            printf("%-8s\n", "PFINFL");
+            std::cout << std::setw(8) << "PFINFL\n";
         }
     }
 
-    cout << endl;
+    std::cout << "\n";
     // 类型表
-    puts("TYPEL");
-    printf("%-8s%-8s\n", "NAME", "TYP");
+    std::cout << "TYPEL\n";
+    std::cout << std::setw(8) << "NAME" << std::setw(8) << "TYP" << "\n";
     for (const auto& r : arr) {
-        printf("%-8s", lex.symbolNames[r.name].c_str());
-        printf("%-8s\n", "AINFL");
+        std::cout << std::setw(8) << lex.symbolNames[r.name];
+        std::cout << std::setw(8) << "AINFL\n";
     }
-    cout << endl;
+    std::cout << "\n";
     // 数组信息表
-    puts("AINFL");
-    printf("%-8s%-8s%-8s%-8s%-8s\n", "NAME", "LOW", "UP", "CTP", "CLEN");
+    std::cout << "AINFL\n";
+    std::cout << std::setw(8) << "NAME" << std::setw(8) << "LOW" << std::setw(8) << "UP" << std::setw(8) << "CTP" << std::setw(8) << "CLEN" << "\n";
     for (const auto& r : arr) {
-        printf("%-8s", lex.symbolNames[r.name].c_str());
-        printf("%-8d%-8d", r.low, r.up);
+        std::cout << std::setw(8) << lex.symbolNames[r.name];
+        std::cout << std::setw(8) << r.low << std::setw(8) << r.up;
         switch (r.ctp) {
-            case INT: printf("%-8s", "int"); break;
-            case DOUBLE: printf("%-8s", "double"); break;
-            case CHAR: printf("%-8s", "char"); break;
-            case BOOL: printf("%-8s", "bool"); break;
+            case INT: std::cout << std::setw(8) << "int"; break;
+            case DOUBLE: std::cout << std::setw(8) << "double"; break;
+            case CHAR: std::cout << std::setw(8) << "char"; break;
+            case BOOL: std::cout << std::setw(8) << "bool"; break;
         }
-        printf("%-8d\n", r.clen);
+        std::cout << std::setw(8) << r.clen << "\n";
     }
-    cout << endl;
+    std::cout << "\n";
     // 函数信息表
-    puts("PFINFL");
-    printf("%-8s%-8s%-8s%-8s%-8s\n", "LEVEL", "OFF", "FN", "ENTRY", "PARAM");
-    printf("%-8s%-8s%-8s%-8s%-8s\n", "0", "0", "0", "0", "0");
-    cout << endl;
+    std::cout << "PFINFL\n";
+    std::cout << std::setw(8) << "LEVEL" << std::setw(8) << "OFF" << std::setw(8) << "FN" << std::setw(8) << "ENTRY" << std::setw(8) << "PARAM" << "\n";
+    std::cout << std::setw(8) << "0" << std::setw(8) << "0" << std::setw(8) << "0" << std::setw(8) << "0" << std::setw(8) << "0" << "\n";
+    std::cout << "\n";
 }
 
 // 获取符号表信息
