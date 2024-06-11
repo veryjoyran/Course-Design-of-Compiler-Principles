@@ -12,6 +12,7 @@
 void lexical_test();
 void grammar_test();
 void lexer_test();
+void symbolTable_test();
 void parser_test();
 void run();
 

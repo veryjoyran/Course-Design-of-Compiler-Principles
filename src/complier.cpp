@@ -12,6 +12,8 @@ std::ofstream outfile_grammar("/home/joyran/Course-Design-of-Compiler-Principles
 std::ifstream infile_parser("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/parser_in.txt");
 std::ofstream outfile_parser("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/parser_out.txt");
 
+std::ifstream infile_symbolTable("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/symbolTable_in.txt");
+std::ofstream outfile_symbolTable("/home/joyran/Course-Design-of-Compiler-Principles/in_out_txt/symbolTable_out.txt");
 
 void lexical_test(LexicalAnalyzer &lexical) {
     
@@ -35,7 +37,7 @@ void lexical_test(LexicalAnalyzer &lexical) {
 void grammar_test(Grammar &grammar){
 
     // 检查文件是否成功打开
-    if (!infile_lexer.is_open() || !outfile_lexer.is_open()) {
+    if (!infile_grammar.is_open() || !outfile_grammar.is_open()) {
         std::cerr << "Error opening files!(grammar)" << std::endl;
     }
 
@@ -99,8 +101,42 @@ void lexer_test(Lexer &lexer) {
 }
 
 
+void symbolTable_test(SymTable &symTable, Lexer &lexer)
+{
+    // 检查文件是否成功打开
+    if (!infile_symbolTable.is_open() || !outfile_symbolTable.is_open()) {
+        std::cerr << "Error opening files!(symbolTable)" << std::endl;
+        return;  // 终止函数执行
+    }
 
-void parser_test(Parser &parser,Lexer &lexer) {
+    
+    // 重定向标准输出到文件
+    std::streambuf* coutbuf = std::cout.rdbuf();
+    std::cout.rdbuf(outfile_symbolTable.rdbuf());
+
+    std::string line;
+    while (std::getline(infile_symbolTable, line)) {
+        symTable.lines.push_back(line);
+    }
+
+    symTable.lex = lexer;
+    symTable.Get_SymTable();
+    symTable.Print_RegularTable();
+    lexer.tokens = symTable.lex.tokens;
+
+    // 恢复标准输出
+    std::cout.flush();  // 确保所有缓冲的输出都写入文件
+    std::cout.rdbuf(coutbuf);  // 恢复原来的缓冲
+
+    // 输出成功信息
+    std::cout << "symbolTable_test success!!!" << std::endl;
+
+    infile_symbolTable.close();
+    outfile_symbolTable.close();
+}
+
+
+void parser_test(Parser &parser,Lexer &lexer,Grammar& grammar,SymTable &symTable) {
     
 
     if (!infile_parser || !outfile_parser) {
@@ -108,24 +144,38 @@ void parser_test(Parser &parser,Lexer &lexer) {
         return;
     }
 
+    // 重定向标准输出到文件
+    std::streambuf* coutbuf = std::cout.rdbuf();
+    std::cout.rdbuf(outfile_parser.rdbuf());
+
+    parser.tokens=lexer.tokens;
+    parser.gram=grammar;
+    parser.lex=lexer;
+
     std::cout<<"LL(1) start"<<"\n";
     parser.LL1();  // 执行LL1解析
 
     std::cout<<"LL(1) completed"<<"\n";
+
+    parser.symtbl=symTable;
+    parser.tokens=symTable.lex.tokens;
     parser.Get_Quats();
 
-    for (const auto& quat : parser.quats) {
-        outfile_parser << "(" << lexer.symbolNames[quat.op] << ", "
-                << (quat.a == -1 ? "_" : lexer.symbolNames[quat.a]) << ", "
-                << (quat.b == -1 ? "_" : lexer.symbolNames[quat.b]) << ", "
-                << (quat.res == -1 ? "_" : lexer.symbolNames[quat.res]) << ")\n";
+    lexer=parser.lex;
+    
+
+ for (const Quat& quat : parser.quats) {
+        parser.Print_Quat(quat);
     }
+
+    // 恢复标准输出
+    std::cout.flush();  // 确保所有缓冲的输出都写入文件
+    std::cout.rdbuf(coutbuf);  // 恢复原来的缓冲
 
     infile_parser.close();
     outfile_parser.close();
     std::cout << "parser_test success!!!" << std::endl;
 }
-
 
 void run()
 {
@@ -135,14 +185,14 @@ void run()
 
     Grammar grammar;
     grammar_test(grammar);
-    if (grammar.Vt.empty()) {
-        std::cout << "grammar.Vt is empty after grammar_test()" << std::endl;
-    } else {
-        for (auto& i : grammar.Vt) {
-            std::cout << i << " ";
-        }
-        std::cout << std::endl;
-    }
+    // if (grammar.Vt.empty()) {
+    //     std::cout << "grammar.Vt is empty after grammar_test()" << std::endl;
+    // } else {
+    //     for (auto& i : grammar.Vt) {
+    //         std::cout << i << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     
     std::string input((std::istreambuf_iterator<char>(infile_lexer)), std::istreambuf_iterator<char>());
     Lexer lexer(input);
@@ -150,8 +200,12 @@ void run()
     lexer_test(lexer);
 
     SymTable symtbl(lexer);  
+    symbolTable_test(symtbl,lexer);
+   
+
+
     Parser parser(lexer.tokens, grammar, lexer, symtbl);
-    parser_test(parser,lexer);
+    parser_test(parser,lexer,grammar,symtbl);
 
 }
 
