@@ -32,7 +32,7 @@ void Parser::Debug_LL1(std::stack<int> S, int j, int d) {
 // LL1 解析
 void Parser::LL1() {
     Get_LL1Table();  // 生成 LL1 分析表
-    Print_LL1Table();
+    // Print_LL1Table();
     std::stack<int> S;
     S.push(gram.Start);  // 将起始符号压入栈
     int d = 0;
@@ -44,7 +44,7 @@ void Parser::LL1() {
                 d++;
                 S.pop();
             } else {
-                std::puts("Not Match!");
+                std::cout<<"Not Match!\n";
                 std::exit(0);
             }
         } else if (gram.Vn.count(i)) {  // 如果是非终结符
@@ -58,22 +58,22 @@ void Parser::LL1() {
                 std::reverse(rev.begin(), rev.end());
                 for (auto x : rev) S.push(x);
             } else {
-                std::puts("Don't have LL1Table!");
+                std::cout<<"Don't have LL1Table!\n";
                 std::exit(0);
             }
         }
     }
-    std::puts("exp is right!");
+    std::cout<<"exp is right!\n";
 }
 
 // 打印四元式
 void Parser::Print_Quat(Quat q) {
-    std::string op, a, b, res;
-    op = lex.symbolNames[q.op];
-    a = (q.a == -1) ? "_" : lex.symbolNames[q.a];
-    b = (q.b == -1) ? "_" : lex.symbolNames[q.b];
-    res = (q.res == -1) ? "_" : lex.symbolNames[q.res];
-    printf("(%s, %s, %s, %s)\n", op.c_str(), a.c_str(), b.c_str(), res.c_str());
+    std::string op = lex.symbolNames[q.op];
+    std::string a = (q.a == -1) ? "_" : lex.symbolNames[q.a];
+    std::string b = (q.b == -1) ? "_" : lex.symbolNames[q.b];
+    std::string res = (q.res == -1) ? "_" : lex.symbolNames[q.res];
+
+    std::cout << "(" << op << ", " << a << ", " << b << ", " << res << ")\n";
 }
 
 // 获取类型
