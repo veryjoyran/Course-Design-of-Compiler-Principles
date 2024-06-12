@@ -257,7 +257,7 @@ void Opt::deletedag() // 清空dag图
     dag.num = 0;
 }
 
-int Opt::divide() // 划分基本块
+int Opt::divide() // 划分基本块，程序的第一个语句、转向语句转到的语句以及后面接着的下一个语句
 {
     int i = 0;
     int num = 1;
