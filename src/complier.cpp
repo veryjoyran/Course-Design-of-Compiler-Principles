@@ -189,10 +189,7 @@ void parser_test(Parser &parser,Lexer &lexer,Grammar& grammar,SymTable &symTable
     std::cout << "parser_test success!!!" << std::endl;
 }
 
-void optimizequa_test(){
 
-
-}
 
 void run()
 {
@@ -285,9 +282,11 @@ void Complier::Init_SymTable() {
     symtbl.lines = lines;
     symtbl.lex = lexer;
     symtbl.Get_SymTable();
+    symtbl.Print_RegularTable();
+    
     tokens = symtbl.lex.tokens;
 
-    symtbl.Print_RegularTable();
+    
 }
 
 void Complier::Get_Quats() {
