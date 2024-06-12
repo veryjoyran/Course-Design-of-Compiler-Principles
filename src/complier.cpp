@@ -189,6 +189,11 @@ void parser_test(Parser &parser,Lexer &lexer,Grammar& grammar,SymTable &symTable
     std::cout << "parser_test success!!!" << std::endl;
 }
 
+void optimizequa_test(){
+
+
+}
+
 void run()
 {
 
@@ -238,58 +243,98 @@ void run()
 
 
 
-// void Complier::Init_Gram() {
-//     grammar.Get_Vn();
-// 	grammar.Get_Vt();
-//     grammar.Get_Gram();
-// 	grammar.Get_Vnull();
-//     grammar.Get_First();
-//     grammar.Get_Follow();
-//     grammar.Get_Select();
 
-// //    gram.Print_Vnull();
-// //    gram.Print_First();
-// //    gram.Print_Follow();
-// //    gram.Print_Select();
-// }
+void Complier::Init_Gram() {
+    grammar.Get_Vn();
+	grammar.Get_Vt();
+    grammar.Get_Gram();
+	grammar.Get_Vnull();
+    grammar.Get_First();
+    grammar.Get_Follow();
+    grammar.Get_Select();
 
-// void Complier::Lexical_Analysis() {
-//     lexer.sourceCode = origin;
-//     lexer.grammar = grammar;
+    grammar.Print_Vnull();
+    grammar.Print_First();
+    grammar.Print_Follow();
+    grammar.Print_Select();
+}
 
-//     lexer.getTokens();
+void Complier::Lexical_Analysis() {
+    lexer.sourceCode = origin;
+    lexer.grammar = grammar;
 
-//     tokens = lexer.tokens;
-// //    puts("token:");
-// //    for(auto i : tokens) {
-// //        printf("i = %d, j = %d, id = %d\n",
-// //               i.i, i.j, i.Vt_id);
-// //        cout << gram.names[i.Vt_id] << endl;
-// //        cout << lex.names[lex.Table[i.i][i.j]] << endl;
-// //    }puts("");
-// }
+    lexer.getTokens();
 
-// void Complier::Grammatical_Analysis() {
-//     parser.tokens = tokens;
-//     parser.gram = grammar;
-//     parser.lex = lexer;
+    tokens = lexer.tokens;
+    for (auto& token : lexer.tokens) {
+        cout << "i: " << token.i << ", j: " << token.j << ", Vt_id: " << token.Vt_id << ", type: " << token.type << ", level: " << token.level << "\n";
+    }
+}
 
-//     parser.LL1();
-// }
+void Complier::Grammatical_Analysis() {
+    parser.tokens = tokens;
+    parser.gram = grammar;
+    parser.lex = lexer;
 
-// void Complier::Init_SymTable() {
-//     symtbl.lines = lines;
-//     symtbl.lex = lexer;
-//     symtbl.Get_SymTable();
-//     tokens = symtbl.lex.tokens;
-// }
+    std::cout<<"LL(1) start"<<"\n";
+    parser.LL1();
+    std::cout<<"LL(1) complete"<<"\n";
+}
 
-// void Complier::Get_Quats() {
-//     parser.symtbl = symtbl;
-//     parser.tokens = tokens;
-//     parser.Get_Quats();
+void Complier::Init_SymTable() {
+    symtbl.lines = lines;
+    symtbl.lex = lexer;
+    symtbl.Get_SymTable();
+    tokens = symtbl.lex.tokens;
 
-//     lexer = parser.lex;
-//     quats = parser.quats;
-//     tokens = parser.tokens;
-// }
+    symtbl.Print_RegularTable();
+}
+
+void Complier::Get_Quats() {
+    parser.symtbl = symtbl;
+    parser.tokens = tokens;
+    parser.Get_Quats();
+
+    lexer = parser.lex;
+    quats = parser.quats;
+    tokens = parser.tokens;
+}
+
+int Complier::get_opt_type(string op) {
+    if(op == "=") return 0;
+    else if(lexer.keywords.count(op)) return 3;
+    return 2;
+}
+
+string Complier::get_t(string str) {
+    for(auto ch : str) {
+        if(ch == 't') return "2";
+    }
+    return "1";
+}
+
+void Complier::Init_opt() {
+    for(int i = 0; i < quats.size(); ++i) {
+        Quat q = quats[i];
+        string op = lexer.symbolNames[q.op];
+        string a = q.a != -1 ? lexer.symbolNames[q.a] : "";
+        string b = q.b != -1 ? lexer.symbolNames[q.b] : "";
+        string res = q.res != -1 ? lexer.symbolNames[q.res] : "";
+//        cout << op << a << b << res << endl;
+        opt.qua[i].type = get_opt_type(op);
+        opt.qua[i].op = op;
+        if(a != "-") {
+        opt.qua[i].num1.name = a;
+        opt.qua[i].num1.type = get_t(a);
+        }
+        if(b != "-") {
+        opt.qua[i].num2.name = b;
+        opt.qua[i].num2.type = get_t(b);
+        }
+        if(res != "-") {
+        opt.qua[i].ans.name = res;
+        opt.qua[i].ans.type = get_t(res);
+        }
+    }
+}
+
