@@ -37,7 +37,7 @@ public:
     std::set<int> Vt, Vn, Vnull;
     std::vector<std::pair<int, std::vector<int>>> Gram;
     std::map<int, std::set<int>> First, Follow, Select;
-    int Start=0;
+    int Start=-1;
 };
 
 #endif // _GRAMMAR_H
