@@ -21,7 +21,34 @@ struct Token {
 
 class Lexer {
 public:
-    Lexer(const std::string& input);
+    Lexer() : 
+        grammar(),
+        sourceCode(""),
+        symbolNames(),
+        tokens(),
+        state(0),
+        str(""),
+        error_flag(false),
+        i(0) 
+    {
+        for (int j = 0; j < 6; ++j) {
+            symbolTable[j] = std::vector<int>();
+        }
+    }
+     Lexer(const std::string& input) : 
+        grammar(),
+        sourceCode(input),
+        symbolNames(),
+        tokens(),
+        state(0),
+        str(""),
+        error_flag(false),
+        i(0) 
+    {
+        for (int j = 0; j < 6; ++j) {
+            symbolTable[j] = std::vector<int>();
+        }
+    }
     int getId(const std::string& str);
     int getPos(int category, int id);
     void getTokens();

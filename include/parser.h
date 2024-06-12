@@ -28,6 +28,12 @@ enum { GEQ = 1, PUSH, ASSI, IF, ELSE, ENDIF, LAB, GOTO, WE, WH, DO };
 // 解析器类
 class Parser {
 public:
+    Parser() :
+        gram(),
+        tokens(),
+        lex(),
+        symtbl(),
+        cnt_t(0) {}
     Parser(const std::vector<Token>& tokens, const Grammar& grammar, const Lexer& lexer, const SymTable& symtbl)
         : tokens(tokens), gram(grammar), lex(lexer), symtbl(symtbl) {
         Get_LL1Table();

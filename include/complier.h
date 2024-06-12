@@ -20,19 +20,20 @@ void run();
 class Complier {
 public:
     Grammar grammar;
-    string origin;
+    std::string origin;
     Lexer lexer;
-    vector<Token> tokens;
+    std::vector<Token> tokens;
     Parser parser;
-    vector<Quat> quats;
+    std::vector<Quat> quats;
     SymTable symtbl;
-    vector<string> lines;
+    std::vector<std::string> lines;
     Opt opt;
-    LexicalAnalyzer lexical;
 
+    // 默认构造函数
+    Complier() {}
 
-    int get_opt_type(string op);
-    string get_t(string str);
+    int get_opt_type(std::string op);
+    std::string get_t(std::string str);
     void Init_Gram();
     void Lexical_Analysis();
     void Grammatical_Analysis();
@@ -40,8 +41,6 @@ public:
     void Get_Quats();
     void Init_opt();
 };
-
-
 
 
 

@@ -62,6 +62,7 @@ public:
     vector<Record> synbl; // 存储符号表记录
     vector<Record> arr; // 存储数组记录
 
+    SymTable() : lex(Lexer()) {}
     // 构造函数
     SymTable(const Lexer& lexer)
         : lex(lexer) {}
