@@ -148,6 +148,12 @@ void parser_test(Parser &parser,Lexer &lexer,Grammar& grammar,SymTable &symTable
     std::streambuf* coutbuf = std::cout.rdbuf();
     std::cout.rdbuf(outfile_parser.rdbuf());
 
+    // 重定向标准输入到文件
+    std::streambuf* cinbuf = std::cin.rdbuf();
+    std::cin.rdbuf(infile_parser.rdbuf());
+
+    parser.Get_Action();
+
     parser.tokens=lexer.tokens;
     parser.gram=grammar;
     parser.lex=lexer;
@@ -159,21 +165,27 @@ void parser_test(Parser &parser,Lexer &lexer,Grammar& grammar,SymTable &symTable
 
     parser.symtbl=symTable;
     parser.tokens=symTable.lex.tokens;
+    
+    // std::cout<<"四元式开始生成"<<"\n";
     parser.Get_Quats();
-
+    // std::cout<<"四元式生成结束"<<"\n";
     lexer=parser.lex;
     
 
- for (const Quat& quat : parser.quats) {
-        parser.Print_Quat(quat);
-    }
+//  for (const Quat& quat : parser.quats) {
+//         parser.Print_Quat(quat);
+//     }
 
-    // 恢复标准输出
+    // 恢复标准输入输出
     std::cout.flush();  // 确保所有缓冲的输出都写入文件
-    std::cout.rdbuf(coutbuf);  // 恢复原来的缓冲
+    std::cin.rdbuf(cinbuf);
+    std::cout.rdbuf(coutbuf);  
 
     infile_parser.close();
     outfile_parser.close();
+
+
+
     std::cout << "parser_test success!!!" << std::endl;
 }
 
@@ -202,10 +214,23 @@ void run()
     SymTable symtbl(lexer);  
     symbolTable_test(symtbl,lexer);
    
-
-
+  
     Parser parser(lexer.tokens, grammar, lexer, symtbl);
     parser_test(parser,lexer,grammar,symtbl);
+    // if (parser.quats.empty()) {
+    //     std::cout << "parser.quats is empty after parser_test()" << std::endl;
+    // } else {
+    //      for (const Quat& quat : parser.quats) {
+    //     parser.Print_Quat(quat);
+    // }
+    //     std::cout << std::endl;
+    // }
+
+    //   for (const auto& token : parser.tokens) {
+    //     cout << "i: " << token.i << ", j: " << token.j << ", Vt_id: " << token.Vt_id << ", type: " << token.type << ", level: " << token.level << "\n";
+    // }
+
+    
 
 }
 
