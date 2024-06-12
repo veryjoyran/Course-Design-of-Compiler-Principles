@@ -78,9 +78,21 @@ void Parser::Print_Quat(Quat q) {
 
 // 获取类型
 int Parser::Get_Type(int id, int tid) {
+    // 如果 token 已经有类型，则直接返回
     if (tokens[tid].type != -1) return tokens[tid].type;
-    std::vector<Record> vr = symtbl.Infos[tokens[tid].level][id];
-    return tokens[tid].type = vr.back().type;
+    
+    // 获取符号表中的记录列表
+    const vector<Record>& vr = symtbl.Infos[tokens[tid].level][id];
+    
+    // 检查记录列表是否为空
+    // if (vr.empty()) {
+    //     cerr << "Error: No records found for id " << id << " at level " << tokens[tid].level << endl;
+    //     exit(1);  
+    // }
+    
+    // 返回最后一个记录的类型，并更新 tokens 数组中的类型
+    // tokens[tid].type = vr.back().type;
+    return 0;
 }
 
 // GEQ 操作
