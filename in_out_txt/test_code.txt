@@ -1,0 +1,62 @@
+int main( ) 
+{ 
+	double c,b;
+	int x;
+	int y;
+	int z;
+	int a[10];
+	if(x > z) 
+	{
+		x = x + y
+	}
+	else 
+	{
+		y = y + z
+	}
+}
+#
+
+
+
+int main() 
+{
+    double x, y;
+	if(x > y)
+	{
+		x = (x + y )* (y + x)
+	}
+	else
+	{
+		y=(x + y) * x
+	}
+}
+#
+
+int main ( ) 
+{
+    int x , y ;
+	int a;
+	int b;
+    while ( a > b ) 
+	{
+    	x=y
+    } 
+}
+#
+
+int main() 
+{
+    int x;
+    double y;
+    char c;
+    bool flag;
+	c=a;
+	x=1;
+	y=3.14
+}
+#
+
+
+
+
+
