@@ -3,7 +3,6 @@
 #include <sstream>
 #include <cctype>
 
-Lexer::Lexer(const std::string& input) : sourceCode(input) {}
 
 int Lexer::getId(const std::string& str) {
     for (int i = 0; i < symbolNames.size(); ++i) {
