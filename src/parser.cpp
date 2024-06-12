@@ -97,24 +97,26 @@ int Parser::Get_Type(int id, int tid) {
 
 // GEQ 操作
 void Parser::GEQ(int op, int tokenid) {
-    int tr = SToken.top(); SToken.pop();
-    int tl = SToken.top(); SToken.pop();
-    int rop = SEM.top(); SEM.pop();
-    int lop = SEM.top(); SEM.pop();
-    int typer = Get_Type(lop, tl), typel = Get_Type(rop, tr);
+    int tr = SToken.top(); SToken.pop(); // 弹出右操作数
+    int tl = SToken.top(); SToken.pop(); // 弹出左操作数
+    int rop = SEM.top(); SEM.pop(); // 弹出右操作数的临时变量
+    int lop = SEM.top(); SEM.pop(); // 弹出左操作数的临时变量
+
+    int typer = Get_Type(lop, tl), typel = Get_Type(rop, tr); // 获取操作数类型
     if (typer != typel) {
-        printf("Error(%d): Type not match : (%s, %s)!\n", tokens[tl].level + 1, lex.symbolNames[lop].c_str(), lex.symbolNames[rop].c_str());
-        std::exit(0);
+        printf("Error(%d): Type not match : (%s, %s)!\n", tokens[tl].level + 1, lex.names[lop].c_str(), lex.names[rop].c_str());
+        exit(0);
     }
-    std::string t = "t" + std::to_string(cnt_t++);
-    quats.push_back(Quat(op, lop, rop, lex.getId(t)));
-    SEM.push(lex.getId(t));
-    Token tt = {tokens[tl].type, -1, tokens[tl].Vt_id};
-    tt.level = tokens[tl].level;
-    tokens.push_back(tt);
-    SToken.push(tokens.size() - 1);
-    Print_Quat(quats.back());
+
+    string t = "t" + to_string(cnt_t++); // 生成新的临时变量
+    quats.push_back(Quat(op, lop, rop, lex.Get_Id(t))); // 生成四元式并添加到四元式向量中
+    SEM.push(lex.Get_Id(t)); // 将临时变量压入栈
+    Token tt = {tokens[tl].type, -1, tokens[tl].Vt_id, tokens[tl].level, -1, -1}; // 创建新的token
+    tokens.push_back(tt); // 添加到tokens向量中
+    SToken.push(tokens.size() - 1); // 将新的token索引压入栈
+    Print_Quat(quats.back()); // 打印生成的四元式
 }
+
 
 // PUSH 操作
 void Parser::PUSH(int x, int tokenid) {
