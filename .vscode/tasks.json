@@ -1,32 +1,120 @@
 {
+    "version": "2.0.0",
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++.exe 生成活动文件",
-<<<<<<< HEAD
-            "command": "E:\\Mingw-64\\mingw64\\bin\\g++.exe",
-=======
-            "command": "C:\\mingw64\\bin\\g++.exe",
->>>>>>> 3887b57342e3ca8c4bb1c2ba59319a913cf99ba7
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
+            "label": "build",
+            "type": "shell",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "调试器生成的任务。"
+            "linux": {
+                "command": "g++",
+                "args": [
+                    "-std=c++17",
+                    "-Wall",
+                    "-Wextra",
+                    "-g",
+                    "-I/home/joyran/Course-Design-of-Compiler-Principles/include",
+                    "-o",
+                    "your_executable_name",
+                    "path/to/your/source_files/*.cpp"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "osx": {
+                "command": "g++",
+                "args": [
+                    "-std=c++17",
+                    "-Wall",
+                    "-Wextra",
+                    "-g",
+                    "-I/home/joyran/Course-Design-of-Compiler-Principles/include",
+                    "-o",
+                    "your_executable_name",
+                    "path/to/your/source_files/*.cpp"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "windows": {
+                "command": "g++",
+                "args": [
+                    "-std=c++17",
+                    "-Wall",
+                    "-Wextra",
+                    "-g",
+                    "-I/home/joyran/Course-Design-of-Compiler-Principles/include",
+                    "-o",
+                    "your_executable_name",
+                    "path/to/your/source_files/*.cpp"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            }
+        },
+        {
+            "label": "build & run",
+            "type": "shell",
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "'g++ -std=c++17 -Wall -Wextra -g -I/home/joyran/Course-Design-of-Compiler-Principles/include -o your_executable_name path/to/your/source_files/*.cpp && ./your_executable_name'"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "'g++ -std=c++17 -Wall -Wextra -g -I/home/joyran/Course-Design-of-Compiler-Principles/include -o your_executable_name path/to/your/source_files/*.cpp && ./your_executable_name'"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "windows": {
+                "command": "powershell",
+                "args": [
+                    "-c",
+                    "'g++ -std=c++17 -Wall -Wextra -g -I/home/joyran/Course-Design-of-Compiler-Principles/include -o your_executable_name path/to/your/source_files/*.cpp; ./your_executable_name'"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            }
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "linux": {
+                "command": "make",
+                "args": ["clean"],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "osx": {
+                "command": "make",
+                "args": ["clean"],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "windows": {
+                "command": "mingw32-make",
+                "args": ["clean"],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            }
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

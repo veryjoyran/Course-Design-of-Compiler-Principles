@@ -1,0 +1,230 @@
+Vnull:
+VarDecl
+IdenTab_
+StaTab_
+Exp_
+Item_
+ElseSta
+LabSta
+L_
+
+First:
+Prog_ : int double char bool
+Prog : int double char bool
+VarDecl : int double char bool
+IdenTab : Iden
+ComSta : {
+StaTab : Iden { if while
+AssiSta : Iden
+AssiSta_ : Iden
+IdenTab_ : ,
+StaTab_ : ;
+Exp : Iden Num (
+Exp_ : > < >= <= == !=
+Item : Iden Num (
+Item_ : * /
+Fac : Iden Num (
+Type : int double char bool
+IfSta : if
+ElseSta : else
+IfSta_ : {
+LabSta : Iden goto
+LabSta_ : Iden
+LabSta' : Iden
+WSta : while
+Swh : while
+Sdo : (
+L : Iden Num (
+L_ : + -
+
+Follow:
+Prog_ :
+Prog : #
+VarDecl : Iden { if while
+IdenTab : ;
+ComSta : Iden } ; else goto #
+StaTab : Iden } goto
+AssiSta : Iden } ; goto
+AssiSta_ : =
+IdenTab_ : ;
+StaTab_ : Iden } goto
+Exp : Iden } ; ) goto
+Exp_ : Iden } ; ) goto
+Item : Iden } ; + - ) goto > < >= <= == !=
+Item_ : Iden } ; + - ) goto > < >= <= == !=
+Fac : Iden } ; + - * / ) goto > < >= <= == !=
+Type : Iden
+IfSta : Iden } ; goto
+ElseSta : Iden } ; goto
+IfSta_ : Iden } ; goto
+LabSta : }
+LabSta_ : Iden { if while
+LabSta' : :
+WSta : Iden } ; goto
+Swh : (
+Sdo : {
+L : Iden } ; ) goto > < >= <= == !=
+L_ : Iden } ; ) goto > < >= <= == !=
+
+Select:
+Prog_ : Prog # [ int double char bool ]
+Prog : Type Iden ( ) ComSta [ int double char bool ]
+ComSta : { VarDecl StaTab LabSta } [ { ]
+VarDecl : Type IdenTab ; VarDecl [ int double char bool ]
+VarDecl : ~ [ Iden { if while ]
+IdenTab : Iden IdenTab_ [ Iden ]
+IdenTab_ : , IdenTab [ , ]
+IdenTab_ : ~ [ ; ]
+StaTab : AssiSta StaTab_ [ Iden ]
+StaTab : ComSta StaTab_ [ { ]
+StaTab : IfSta StaTab_ [ if ]
+StaTab_ : ; StaTab [ ; ]
+StaTab_ : ~ [ Iden } goto ]
+IfSta : if ( Exp ) IfSta_ [ if ]
+IfSta_ : ComSta ElseSta [ { ]
+ElseSta : ~ [ Iden } ; goto ]
+ElseSta : else ComSta [ else ]
+AssiSta : AssiSta_ = Exp [ Iden ]
+AssiSta_ : Iden [ Iden ]
+L : Item L_ [ Iden Num ( ]
+L_ : + Item L_ [ + ]
+L_ : - Item L_ [ - ]
+L_ : ~ [ Iden } ; ) goto > < >= <= == != ]
+Item : Fac Item_ [ Iden Num ( ]
+Item_ : * Fac Item_ [ * ]
+Item_ : / Fac Item_ [ / ]
+Item_ : ~ [ Iden } ; + - ) goto > < >= <= == != ]
+Fac : Num [ Num ]
+Fac : Iden [ Iden ]
+Fac : ( Exp ) [ ( ]
+Type : int [ int ]
+Type : double [ double ]
+Type : char [ char ]
+LabSta : LabSta_ StaTab LabSta [ Iden ]
+LabSta_ : LabSta' : [ Iden ]
+LabSta' : Iden [ Iden ]
+LabSta : goto Iden ; [ goto ]
+LabSta : ~ [ } ]
+StaTab : WSta StaTab_ [ while ]
+WSta : Swh Sdo ComSta [ while ]
+Swh : while [ while ]
+Sdo : ( Exp ) [ ( ]
+Exp : L Exp_ [ Iden Num ( ]
+Exp_ : > L Exp_ [ > ]
+Exp_ : < L Exp_ [ < ]
+Exp_ : >= L Exp_ [ >= ]
+Exp_ : <= L Exp_ [ <= ]
+Exp_ : == L Exp_ [ == ]
+Exp_ : != L Exp_ [ != ]
+Exp_ : ~ [ Iden } ; ) goto ]
+Type : bool [ bool ]
+
+Grammar Init Succsess
+
+Action_Init Success
+
+i: 1, j: 0, Vt_id: 42, type: -1, level: 0
+i: 3, j: 0, Vt_id: 28, type: -1, level: 0
+i: 2, j: 0, Vt_id: 40, type: -1, level: 0
+i: 2, j: 1, Vt_id: 41, type: -1, level: 0
+i: 2, j: 2, Vt_id: 29, type: -1, level: 0
+i: 1, j: 1, Vt_id: 43, type: -1, level: 0
+i: 3, j: 1, Vt_id: 28, type: -1, level: 0
+i: 2, j: 3, Vt_id: 31, type: -1, level: 0
+i: 3, j: 2, Vt_id: 28, type: -1, level: 0
+i: 2, j: 4, Vt_id: 33, type: -1, level: 0
+i: 1, j: 0, Vt_id: 42, type: -1, level: 0
+i: 3, j: 3, Vt_id: 28, type: -1, level: 0
+i: 2, j: 4, Vt_id: 33, type: -1, level: 0
+i: 1, j: 0, Vt_id: 42, type: -1, level: 0
+i: 3, j: 4, Vt_id: 28, type: -1, level: 0
+i: 2, j: 4, Vt_id: 33, type: -1, level: 0
+i: 1, j: 0, Vt_id: 42, type: -1, level: 0
+i: 3, j: 5, Vt_id: 28, type: -1, level: 0
+i: 2, j: 4, Vt_id: 33, type: -1, level: 0
+i: 1, j: 0, Vt_id: 42, type: -1, level: 0
+i: 1, j: 2, Vt_id: 28, type: -1, level: 0
+i: 2, j: 4, Vt_id: 33, type: -1, level: 0
+i: 1, j: 3, Vt_id: 46, type: -1, level: 0
+i: 2, j: 0, Vt_id: 40, type: -1, level: 0
+i: 3, j: 3, Vt_id: 28, type: -1, level: 0
+i: 2, j: 5, Vt_id: 50, type: -1, level: 0
+i: 3, j: 5, Vt_id: 28, type: -1, level: 0
+i: 2, j: 1, Vt_id: 41, type: -1, level: 0
+i: 2, j: 2, Vt_id: 29, type: -1, level: 0
+i: 3, j: 3, Vt_id: 28, type: -1, level: 0
+i: 2, j: 6, Vt_id: 34, type: -1, level: 0
+i: 3, j: 3, Vt_id: 28, type: -1, level: 0
+i: 2, j: 7, Vt_id: 35, type: -1, level: 0
+i: 3, j: 4, Vt_id: 28, type: -1, level: 0
+i: 2, j: 8, Vt_id: 30, type: -1, level: 0
+i: 1, j: 4, Vt_id: 47, type: -1, level: 0
+i: 2, j: 2, Vt_id: 29, type: -1, level: 0
+i: 3, j: 4, Vt_id: 28, type: -1, level: 0
+i: 2, j: 6, Vt_id: 34, type: -1, level: 0
+i: 3, j: 4, Vt_id: 28, type: -1, level: 0
+i: 2, j: 7, Vt_id: 35, type: -1, level: 0
+i: 3, j: 5, Vt_id: 28, type: -1, level: 0
+i: 2, j: 8, Vt_id: 30, type: -1, level: 0
+i: 2, j: 8, Vt_id: 30, type: -1, level: 0
+i: 2, j: 9, Vt_id: 56, type: -1, level: 0
+Lexer Succsess
+
+LL(1) start
+exp is right!
+LL(1) complete
+LL(1) Success
+
+SYNBL
+    NAME     TYP     CAT    ADDR
+    main  PFINFL       f PFINFL
+    c,b;  double       v   (1,0)
+      x;     int       v   (1,8)
+      y;     int       v  (1,12)
+      z;     int       v  (1,16)
+       a   AINFL       tAINFL, 1
+
+TYPEL
+    NAME     TYP
+       a  AINFL
+
+AINFL
+    NAME     LOW      UP     CTP    CLEN
+       a      20      60     int      40
+
+PFINFL
+   LEVEL     OFF      FN   ENTRY   PARAM
+       0       0       0       0       0
+
+SymbolTable Success
+
+(>, x, z, t0)
+(if, t0, _, _)
+(+, x, y, t1)
+(=, t1, _, x)
+(el, _, _, _)
+(+, y, z, t2)
+(=, t2, _, y)
+(ie, _, _, _)
+Quats Success
+
+1 ( > x z t0 )
+1 ( if t0   )
+2 ( + x y x )
+2 ( el    )
+3 ( + y z y )
+3 ( ie    )
+
+0         LD R,x    
+1         > R,z     
+2         FJ R,7    
+3         LD R,x    
+4         ADD R,y   
+5         ST R,x    
+6         JMP 12    
+7         ST R,x    
+8         LD R,y    
+9         ADD R,z   
+10        ST R,y    
+11        JMP       
+12        ST R,y    

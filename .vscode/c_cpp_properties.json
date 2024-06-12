@@ -1,20 +1,40 @@
 {
     "configurations": [
         {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/joyran/Course-Design-of-Compiler-Principles/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/joyran/Course-Design-of-Compiler-Principles/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"
+        },
+        {
             "name": "Win32",
             "includePath": [
-                "D:\\c_cpp_programming\\Course-Design-of-Compiler-Principles\\source_code\\inc"
+                "${workspaceFolder}/**",
+                "C:/path/to/your/include"
             ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "windowsSdkVersion": "10.0.22000.0",
-            "cStandard": "c17",
+            "defines": [],
+            "compilerPath": "C:/path/to/your/compiler",
+            "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "${default}",
-            "compilerPath": "E:/Mingw-64/mingw64/bin/g++.exe"
+            "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4

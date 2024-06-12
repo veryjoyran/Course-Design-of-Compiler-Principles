@@ -1,16 +1,10 @@
-int main( ) 
-{ 
-	int x;
-	int y;
-	int z;
-	int a[10];
-	if(x > z) 
-	{
-		x = x + y
-	}
-	else 
-	{
-		y = y + z
-	}
+int main() 
+{
+    int x;
+	x = 10;
+    double y;
+	y= 3.14;
+    char c;
+	c= 'a';
 }
 #

@@ -1,99 +1,34 @@
-#
-# 'make'        build executable file 'main'
-# 'make clean'  removes all .o and executable files
-#
-
-# define the Cpp compiler to use
 CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -g -Iinclude -Iimgui -Iimgui/backends
 
-# define any compile-time flags
-CXXFLAGS	:= -std=c++17 -Wall -Wextra -g
+SRC_DIR = src
+OBJ_DIR = output
+IMGUI_DIR = imgui
 
-# define library paths in addition to /usr/lib
-#   if I wanted to include libraries not in /usr/lib I'd specify
-#   their path using -Lpath, something like:
-LFLAGS =
+IMGUI_SRC = $(IMGUI_DIR)/imgui.cpp \
+            $(IMGUI_DIR)/imgui_draw.cpp \
+            $(IMGUI_DIR)/imgui_widgets.cpp \
+            $(IMGUI_DIR)/imgui_demo.cpp \
+            $(IMGUI_DIR)/imgui_tables.cpp \
+            $(IMGUI_DIR)/backends/imgui_impl_glfw.cpp \
+            $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 
-# define output directory
-OUTPUT	:= output
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+IMGUI_OBJS = $(IMGUI_SRC:.cpp=.o)
 
-# define source directory
-SRC		:= src
+TARGET = main
 
-# define include directory
-INCLUDE	:= include
+all: $(TARGET)
 
-# define lib directory
-LIB		:= lib
+$(TARGET): $(OBJS) $(IMGUI_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -lGL -lGLEW -lglfw
 
-ifeq ($(OS),Windows_NT)
-MAIN	:= main.exe
-SOURCEDIRS	:= $(SRC)
-INCLUDEDIRS	:= $(INCLUDE)
-LIBDIRS		:= $(LIB)
-FIXPATH = $(subst /,\,$1)
-RM			:= del /q /f
-MD	:= mkdir
-else
-MAIN	:= main
-SOURCEDIRS	:= $(shell find $(SRC) -type d)
-INCLUDEDIRS	:= $(shell find $(INCLUDE) -type d)
-LIBDIRS		:= $(shell find $(LIB) -type d)
-FIXPATH = $1
-RM = rm -f
-MD	:= mkdir -p
-endif
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# define any directories containing header files other than /usr/include
-INCLUDES	:= $(patsubst %,-I%, $(INCLUDEDIRS:%/=%))
+$(IMGUI_DIR)/%.o: $(IMGUI_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# define the C libs
-LIBS		:= $(patsubst %,-L%, $(LIBDIRS:%/=%))
-
-# define the C source files
-SOURCES		:= $(wildcard $(patsubst %,%/*.cpp, $(SOURCEDIRS)))
-
-# define the C object files
-OBJECTS		:= $(SOURCES:.cpp=.o)
-
-# define the dependency output files
-DEPS		:= $(OBJECTS:.o=.d)
-
-#
-# The following part of the makefile is generic; it can be used to
-# build any executable just by changing the definitions above and by
-# deleting dependencies appended to the file from 'make depend'
-#
-
-OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
-
-all: $(OUTPUT) $(MAIN)
-	@echo Executing 'all' complete!
-
-$(OUTPUT):
-	$(MD) $(OUTPUT)
-
-$(MAIN): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $(OUTPUTMAIN) $(OBJECTS) $(LFLAGS) $(LIBS)
-
-# include all .d files
--include $(DEPS)
-
-# this is a suffix replacement rule for building .o's and .d's from .c's
-# it uses automatic variables $<: the name of the prerequisite of
-# the rule(a .c file) and $@: the name of the target of the rule (a .o file)
-# -MMD generates dependency output files same name as the .o file
-# (see the gnu make manual section about automatic variables)
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c -MMD $<  -o $@
-
-.PHONY: clean
 clean:
-	$(RM) $(OUTPUTMAIN)
-	$(RM) $(call FIXPATH,$(OBJECTS))
-	$(RM) $(call FIXPATH,$(DEPS))
-	@echo Cleanup complete!
-
-run: all
-	./$(OUTPUTMAIN)
-	@echo Executing 'run: all' complete!
+	rm -f $(OBJ_DIR)/*.o $(IMGUI_DIR)/*.o $(TARGET)

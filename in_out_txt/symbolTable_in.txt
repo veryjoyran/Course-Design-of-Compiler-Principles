@@ -1,5 +1,6 @@
 int main( ) 
 { 
+	double c,b;
 	int x;
 	int y;
 	int z;
