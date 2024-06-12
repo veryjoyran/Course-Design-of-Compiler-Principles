@@ -23,7 +23,7 @@ public:
 
     struct Quaternion {
         int block; // 块号
-        int type;  // 操作类型 - 0, 1, 2, 3
+        int type;  // 操作类型 ，0表示赋值,1表示跳转，2表示双目运算，3表示条件控制语句
         std::string op; // 操作
         Token num1; // 操作数1
         Token num2; // 操作数2
@@ -53,12 +53,12 @@ public:
     std::vector<std::vector<Quaternion>> ToTarget;
 
     struct Node {
-        int left;
+        int left; //左子节点标识
         int right;
-        int id;
-        std::string op;
-        Token m_sign;
-        Token sign[maxn];
+        int id;   //节点标识
+        std::string op;   //操作
+        Token m_sign;    //主标记
+        Token sign[maxn];   //附加标记
     };
 
     struct DAG {
